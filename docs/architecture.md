@@ -17,12 +17,23 @@ This document is a living document and will be updated as the system evolves.
 
 ## 2. Scope
 
-The current scope covers:
+### 2.1 Current Implementation Status
 
-- A **desktop-only** Kanban board built with **Electron + React + TypeScript + Vite**  
-- **Local, offline storage** using **LowDB** (JSON file)  
-- A simple domain model: **Board → Column → Card**  
-- Support for **multiple boards (projects)** in the future
+✅ **Implemented:**
+- Basic Electron + React + TypeScript + Vite setup
+- Project structure with electron/, src/, and docs/ folders
+- Electron main process with window management
+- Preload script with context isolation
+- React application entry point
+
+📋 **Planned (not yet implemented):**
+- Local, offline storage using LowDB (JSON file)
+- Domain model classes: Board, Column, Card
+- IPC handlers for data persistence
+- Storage abstraction layer
+- Kanban board UI components
+
+### 2.2 Future Scope
 
 Out of scope for now (planned for later):
 
@@ -77,24 +88,29 @@ The communication between these two parts happens over **IPC (inter-process comm
 
 ### 4.2 Component Overview
 
+**✅ Implemented:**
+
 - `electron/main.ts`
-  - Creates and manages the application window
-  - Initializes the LowDB database
-  - Handles IPC requests for loading and saving boards
+  - ✅ Creates and manages the application window
+  - ✅ Handles development and production modes
+  - 📋 Initializes the LowDB database (planned)
+  - 📋 Handles IPC requests for loading and saving boards (planned)
 
 - `electron/preload.ts`
-  - Runs in a special context with access to both Node and browser APIs
-  - Exposes a safe API to `window` (e.g. `window.api.loadBoards()`)
-  - Prevents direct access to Node APIs from React
+  - ✅ Runs in a special context with access to both Node and browser APIs
+  - ✅ Sets up context isolation
+  - 📋 Exposes a safe API to `window.api` (planned, currently uses `window.electronAPI`)
 
 - `src/main.tsx`
-  - Entry point for the React application
-  - Renders `<App />` into the DOM
+  - ✅ Entry point for the React application
+  - ✅ Renders `<App />` into the DOM
 
 - `src/App.tsx`
-  - Root component of the UI
-  - Loads boards on startup
-  - Renders current board, columns and cards
+  - ✅ Basic React component structure
+  - 📋 Loads boards on startup (planned)
+  - 📋 Renders current board, columns and cards (planned)
+
+**📋 Planned (not yet implemented):**
 
 - `src/models/*`
   - Domain model classes or types (Board, Column, Card)
@@ -107,6 +123,8 @@ The communication between these two parts happens over **IPC (inter-process comm
 ---
 
 ## 5. Domain Model
+
+📋 **Status: Planned (not yet implemented)**
 
 The core domain model is centered around a **Kanban board** consisting of **columns** and **cards**.
 
@@ -199,11 +217,13 @@ classDiagram
 
 ## 6. Storage Architecture
 
+📋 **Status: Planned (not yet implemented)**
+
 ### 6.1 Storage Abstraction
 
-To keep the system flexible, data access is abstracted via a storage provider interface.
+To keep the system flexible, data access will be abstracted via a storage provider interface.
 
-Example concept:
+**Planned interface:**
 
 ```ts
 export interface StorageProvider {
@@ -212,16 +232,16 @@ export interface StorageProvider {
 }
 ```
 
-This allows multiple implementations:
+This will allow multiple implementations:
 
-- **LocalStorageProvider** (current) – uses LowDB and JSON
+- **LocalStorageProvider** (planned) – uses LowDB and JSON
 - **CloudStorageProvider** (future) – uses AWS DynamoDB or another backend
 
-The React UI does not know how data is stored; it only calls the provider.
+The React UI will not know how data is stored; it will only call the provider.
 
-### 6.2 Local Storage with LowDB (Current Implementation)
+### 6.2 Local Storage with LowDB (Planned Implementation)
 
-The Electron main process uses LowDB to read and write a JSON file on disk.
+**📋 Planned:** The Electron main process will use LowDB to read and write a JSON file on disk.
 
 **Storage file path (example):**
 - `~/Library/Application Support/KanbanBoard/data.json` (macOS)
@@ -254,21 +274,25 @@ The Electron main process uses LowDB to read and write a JSON file on disk.
 }
 ```
 
-The main process exposes IPC handlers such as:
+**Planned IPC handlers:**
 
 - `load-boards` → returns all boards from LowDB
 - `save-boards` → writes updated boards back to LowDB
 
-The preload script wraps these in a typed API, for example:
+**Planned preload API (will be exposed as `window.api`):**
 
 - `window.api.loadBoards(): Promise<Board[]>;`
 - `window.api.saveBoards(boards: Board[]): Promise<void>;`
+
+**Note:** Currently, the preload script uses `window.electronAPI` as a placeholder. This will be renamed to `window.api` when the storage functionality is implemented.
 
 ---
 
 ## 7. Data Flow
 
-### 7.1 Loading Data
+📋 **Status: Planned (not yet implemented)**
+
+### 7.1 Loading Data (Planned)
 
 1. User opens the application.
 2. Electron main process initializes LowDB.
@@ -277,7 +301,7 @@ The preload script wraps these in a typed API, for example:
 5. Main process reads data from the JSON file via LowDB.
 6. Data is returned to React and stored in the UI state (e.g. using a state manager).
 
-### 7.2 Updating Data
+### 7.2 Updating Data (Planned)
 
 1. User creates/updates/moves/deletes a card or column in the UI.
 2. React updates the local state (Board/Column/Card objects).
@@ -311,8 +335,21 @@ The architecture is intentionally designed to support future features without ma
 
 ## 9. Summary
 
-- The system is a desktop-only Kanban board built with Electron + React + TypeScript + LowDB.
-- The core domain model consists of Board, Column, and Card, with clear relationships and responsibilities.
-- Data access is abstracted via a StorageProvider interface, allowing future cloud integrations (e.g. AWS DynamoDB).
-- Electron's main process handles persistence using LowDB and exposes a safe API to the React UI via a preload script.
+**Current State:**
+- ✅ Basic project structure is set up with Electron + React + TypeScript + Vite
+- ✅ Electron main process and preload script are configured
+- ✅ React application entry point is implemented
+- 📋 LowDB integration is planned but not yet implemented
+- 📋 Domain models (Board, Column, Card) are planned but not yet implemented
+- 📋 Storage abstraction layer is planned but not yet implemented
+
+**Architecture Goals:**
+- The system will be a desktop-only Kanban board built with Electron + React + TypeScript + LowDB.
+- The core domain model will consist of Board, Column, and Card, with clear relationships and responsibilities.
+- Data access will be abstracted via a StorageProvider interface, allowing future cloud integrations (e.g. AWS DynamoDB).
+- Electron's main process will handle persistence using LowDB and expose a safe API to the React UI via a preload script.
 - The architecture is designed to be simple, extendable and suitable as a training project for OOP, Scrum and later full-stack/cloud topics.
+
+**Legend:**
+- ✅ Implemented
+- 📋 Planned (not yet implemented)
