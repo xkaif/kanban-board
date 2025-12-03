@@ -17,3 +17,142 @@ body {
   height: 100vh;
 }
 
+body {
+  background: #fffef9;
+}
+
+.app {
+  display: flex;
+  height: 100%;
+  padding: 16px;
+  gap: 16px;
+}
+
+.sidebar {
+  width: 260px;
+  border-radius: 20px;
+  border: 2px solid #222;
+  background: repeating-linear-gradient(
+      -45deg,
+      rgba(0, 0, 0, 0.02),
+      rgba(0, 0, 0, 0.02) 4px,
+      rgba(0, 0, 0, 0.04) 4px,
+      rgba(0, 0, 0, 0.04) 8px
+    );
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.sidebar-board-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-board {
+  border-radius: 6px;
+  border: 2px solid transparent;
+  padding: 6px 10px;
+  text-align: left;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.sidebar-board--active {
+  border-color: #ffb347;
+  background: #fff7e6;
+}
+
+.sidebar-add-board {
+  margin-top: auto;
+  align-self: flex-start;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 2px solid #ffb347;
+  background: #fff;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.board {
+  flex: 1;
+  display: flex;
+  gap: 16px;
+}
+
+.column {
+  flex: 1;
+  border-radius: 20px;
+  border: 2px solid #222;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.column-header {
+  margin-bottom: 12px;
+}
+
+.column-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.column-body {
+  flex: 1;
+}
+
+.column-add-card {
+  margin-top: 12px;
+  align-self: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 2px solid #ffb347;
+  background: #fff;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.card {
+  border-radius: 16px;
+  border: 2px solid #222;
+  padding: 10px 12px;
+  background: #fff;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+
+.card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.card-badge {
+  border-radius: 999px;
+  border: 1px solid #222;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+}
+
