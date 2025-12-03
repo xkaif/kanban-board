@@ -1,15 +1,32 @@
+import { Column } from './column';
+
 export type BoardId = string;
-export type ColumnId = string;
 
-export interface Column {
-  id: ColumnId;
-  title: string;
-}
+/**
+ * Represents one Kanban board (one project).
+ */
+export class Board {
+  public columns: Column[];
 
-export interface Board {
-  id: BoardId;
-  name: string;
-  columns: Column[];
+  constructor(
+    public readonly id: BoardId,
+    public name: string,
+    columns?: Column[],
+  ) {
+    this.columns = columns ? [...columns] : [];
+  }
+
+  addColumn(column: Column): void {
+    this.columns.push(column);
+  }
+
+  removeColumn(columnId: string): void {
+    this.columns = this.columns.filter((column) => column.id !== columnId);
+  }
+
+  getColumn(columnId: string): Column | undefined {
+    return this.columns.find((column) => column.id === columnId);
+  }
 }
 
 /**
@@ -21,15 +38,10 @@ export interface Board {
  * - "Done"
  */
 export function createDefaultBoard(): Board {
-  return {
-    id: 'board-1',
-    name: 'Board 1',
-    columns: [
-      { id: 'column-todo', title: 'To Do' },
-      { id: 'column-in-progress', title: 'In Progress' },
-      { id: 'column-done', title: 'Done' },
-    ],
-  };
+  return new Board('board-1', 'Board 1', [
+    new Column('column-todo', 'To Do'),
+    new Column('column-in-progress', 'In Progress'),
+    new Column('column-done', 'Done'),
+  ]);
 }
-
 

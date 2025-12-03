@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import type { Board } from './models/board';
-import { createDefaultBoard } from './models/board';
+import { Board, createDefaultBoard } from './models/board';
 
 function App() {
   const [board] = useState<Board>(() => createDefaultBoard());
@@ -27,7 +26,7 @@ function App() {
         {board.columns.map((column) => (
           <section key={column.id} className="column">
             <header className="column-header">
-              <h2 className="column-title">{column.title}</h2>
+              <h2 className="column-title">{column.name}</h2>
             </header>
 
             <div className="column-body">
